@@ -1,2 +1,2 @@
-# Vis-o-Computacional-Projeto
+# Visao-Computacional-Projeto
 Projeto que usa Opencv e Python para brincar com a camera
