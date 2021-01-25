@@ -1,13 +1,13 @@
 import cv2
 import numpy as np
 from time import gmtime, strftime
-
+import imutils  
 
 def put_png(png, bg):
     # pegando alpha do png
     alpha = png[:,:,3]
     # Criando mascara para remover a area do png
-    _, mask_inv = cv2.threshold(alpha, 1, 255, cv2.THRESH_BINARY_INV)
+    _, mask_inv = cv2.threshold(alpha, 5, 255, cv2.THRESH_BINARY_INV)
     # conbertendo a mascara em rgba pra ter 4 canais
     mask_4depths = cv2.cvtColor(mask_inv, cv2.COLOR_GRAY2RGBA)
     # aplicvando no background 
@@ -35,7 +35,7 @@ nose_cascade = cv2.CascadeClassifier('cascades/third-party/Nose18x15.xml')
 #pngs
 glasses = cv2.imread("glasses.png", -1)
 mustache = cv2.imread("mustache.png", -1)
-hat = cv2.imread("hat.png", -1)
+hat = cv2.imread("Hat.png", -1)
 
 while(True):
     ret, frame = video.read()
@@ -51,8 +51,40 @@ while(True):
         roi_color = frame[y:y+h, x:x+h]
         cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 255), 3)
 
-        #hat2 = hat.copy()
-        #c2.imshow("hat", hat2)
+        hat2 = imutils.resize(hat.copy(), width=w+200)
+        #print("hat", hat.shape)
+        #print("y", y)
+        #print("hat2", hat2.shape)
+        #cv2.imshow("hat", hat2)
+
+        hat_h, hat_w, hat_d = hat2.shape
+        start = 0
+        down_hat = 100
+        hat_area = frame[:y+down_hat, x-100:x+w+100]
+        if ((y - hat_h)+down_hat < 0):
+            #print("caiu no 1")
+            start = hat_h - (y +down_hat)
+            #print(hat2[start:,:].shape)
+            #print(hat_area.shape)
+            frame[:y+down_hat, x-100:x+w+100] = put_png(hat2[start:,:], hat_area)
+           
+        else:
+            print("caiu no 2")
+            hat_area = frame[y+down_hat-hat_h:y+down_hat, x-100:x+w+100]
+            #print(hat2.shape)
+            #print(hat_area.shape)
+            frame[y+down_hat-hat_h:y+down_hat, x-100:x+w+100] = put_png(hat2, hat_area)
+            
+
+        #cv2.imshow("hat", hat2[start:,:])
+
+        
+
+        #cv2.imshow("tela onde vo por chapeu", hat_area)
+
+        
+
+        #print(hat2.shape, y)
 
         # DETECÇÃO DOS OLHOS NA AREA DO ROSTO
         eyes = eyes_cascade.detectMultiScale(roi_gray, scaleFactor=1.5, minNeighbors=5)
@@ -99,7 +131,7 @@ while(True):
     frame_rsz = cv2.resize(frame, (w_vid//2, h_vid//2))
     #glasses_rsz = cv2.resize(glasses, (w_vid, h_vid))
     #print(glasses.shape)
-    cv2.imshow('Paint Webcam', frame)
+    cv2.imshow('Paint Webcam', frame_rsz)
     #cv2.imshow('glasses', glasses)
     
 
