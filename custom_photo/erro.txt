@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File ".\pICture.py", line 61, in <module>
+    frame = cust_photo.run_app(frame)
+  File "C:\Users\Lucas S\Desktop\Projeto VC\custom_photo\cascades.py", line 100, in run_app
+    glasses2 = cv2.resize(self.glasses.copy(), (gh, gw))
+cv2.error: OpenCV(4.5.1) C:\Users\appveyor\AppData\Local\Temp\1\pip-req-build-kh7iq4w7\opencv\modules\imgproc\src\resize.cpp:4054: error: (-215:Assertion failed) inv_scale_x > 0 in function 'cv::resize'
