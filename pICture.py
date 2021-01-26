@@ -28,6 +28,7 @@ shape_vid = (540, 960)
 
 video = cv2.VideoCapture(0)
 cam_ip = "https://10.0.0.104:8080/video"
+#cam_ip = "https://192.168.0.3:8080/video"
 video.open(cam_ip)
 
 
